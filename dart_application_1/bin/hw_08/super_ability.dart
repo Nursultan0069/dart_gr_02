@@ -1,0 +1,7 @@
+enum SuperAbility {
+  CRITICAL_DAMAGE,
+  BOOST,
+  HEAL,
+  BLOCK_DAMAGE,
+  LUDOMAN
+}
