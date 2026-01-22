@@ -17,11 +17,11 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade300, // фон экрана
+      backgroundColor: Colors.grey.shade300, 
       appBar: AppBar(
         title: const Text('Profile'),
         centerTitle: true,
-        backgroundColor: Colors.deepPurple, // новый цвет AppBar
+        backgroundColor: Colors.deepPurple, 
       ),
       body: Center(
         child: Column(
@@ -34,7 +34,7 @@ class ProfilePage extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            // Имя
+            
             Text(
               name,
               style: const TextStyle(
@@ -45,7 +45,7 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
 
-            // Возраст
+        
             Text(
               'Age: $age',
               style: const TextStyle(
@@ -55,7 +55,7 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
 
-            // Город
+          
             Text(
               city,
               style: const TextStyle(
@@ -67,7 +67,7 @@ class ProfilePage extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            // Bio
+            
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
@@ -83,7 +83,7 @@ class ProfilePage extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            // Интересы
+            
             const Text(
               'Interests',
               style: TextStyle(
