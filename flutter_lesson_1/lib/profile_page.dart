@@ -6,54 +6,60 @@ class ProfilePage extends StatelessWidget {
   final String name = 'Tom Hardy';
   final int age = 45;
   final String city = 'London';
-  final String bio = 'Actor and producer';
+  final String bio = 'Actor';
 
   final List<String> interests = const [
-    '🎬 Movies',
-    '🏋️ Fitness',
-    '🎮 Video games',
+    ' Movies',
+    ' Fitness',
+    ' Theatre',
   ];
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade200, // фон экрана
+      backgroundColor: Colors.grey.shade300, // фон экрана
       appBar: AppBar(
         title: const Text('Profile'),
         centerTitle: true,
-        backgroundColor: Colors.deepPurple, // цвет AppBar
+        backgroundColor: Colors.deepPurple, // новый цвет AppBar
       ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const CircleAvatar(
-              radius: 70,
+              radius: 80,
               backgroundImage: AssetImage('images/tomhardy.jpg'),
             ),
+
             const SizedBox(height: 16),
 
+            // Имя
             Text(
               name,
               style: const TextStyle(
+                fontFamily: 'Montserrat',
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
             ),
 
+            // Возраст
             Text(
               'Age: $age',
               style: const TextStyle(
+                fontFamily: 'Montserrat',
                 fontSize: 16,
                 color: Colors.blueGrey,
               ),
             ),
 
+            // Город
             Text(
               city,
               style: const TextStyle(
+                fontFamily: 'Montserrat',
                 fontSize: 16,
                 color: Colors.deepPurple,
               ),
@@ -61,12 +67,14 @@ class ProfilePage extends StatelessWidget {
 
             const SizedBox(height: 12),
 
+            // Bio
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
                 bio,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
+                  fontFamily: 'Montserrat',
                   fontSize: 16,
                   color: Colors.black54,
                 ),
@@ -75,9 +83,11 @@ class ProfilePage extends StatelessWidget {
 
             const SizedBox(height: 16),
 
+            // Интересы
             const Text(
               'Interests',
               style: TextStyle(
+                fontFamily: 'Montserrat',
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
@@ -88,6 +98,7 @@ class ProfilePage extends StatelessWidget {
               (interest) => Text(
                 interest,
                 style: const TextStyle(
+                  fontFamily: 'Montserrat',
                   fontSize: 16,
                   color: Colors.teal,
                 ),
@@ -98,7 +109,10 @@ class ProfilePage extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {},
-              child: const Text('Follow'),
+              child: const Text(
+                'Follow',
+                style: TextStyle(fontFamily: 'Montserrat'),
+              ),
             ),
           ],
         ),
