@@ -10,4 +10,18 @@ class Todo {
     required this.date,
     this.isDone = false,
   });
+
+  Todo copyWith({
+    int? id,
+    String? title,
+    DateTime? date,
+    bool? isDone,
+  }) {
+    return Todo(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      date: date ?? this.date,
+      isDone: isDone ?? this.isDone,
+    );
+  }
 }
