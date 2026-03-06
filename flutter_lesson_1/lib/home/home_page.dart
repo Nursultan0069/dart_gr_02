@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../main.dart'; // чтобы взять InheritedRepo
+import '../main.dart';
 import '../models/todo.dart';
 import '../pages/add_todo_page.dart';
+import '../pages/details_page.dart';
 import '../widgets/todo_tile.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,24 +18,42 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _load();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _load();
+    });
   }
 
   Future<void> _load() async {
     final repo = InheritedRepo.of(context);
     final list = await repo.getTodos();
-    setState(() => todos = list);
+
+    if (!mounted) return;
+
+    setState(() {
+      todos = list;
+    });
   }
 
-  Future<void> _openAdd() async {
+  Future<void> _openAddTodo() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const AddTodoPage()),
+      MaterialPageRoute(
+        builder: (_) => const AddTodoPage(),
+      ),
     );
 
     if (result == true) {
-      await _load(); // ✅ обновляем список
+      await _load();
     }
+  }
+
+  void _openDetails(Todo todo) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => DetailsPage(todo: todo),
+      ),
+    );
   }
 
   @override
@@ -58,7 +77,11 @@ class _HomePageState extends State<HomePage> {
         ),
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(1),
-          child: Divider(height: 1, thickness: 1, color: Color(0x22000000)),
+          child: Divider(
+            height: 1,
+            thickness: 1,
+            color: Color(0x22000000),
+          ),
         ),
       ),
       body: ListView.separated(
@@ -67,6 +90,7 @@ class _HomePageState extends State<HomePage> {
         separatorBuilder: (_, __) => const SizedBox(height: 16),
         itemBuilder: (context, index) {
           final todo = todos[index];
+
           return TodoTile(
             todo: todo,
             onToggle: () async {
@@ -74,6 +98,7 @@ class _HomePageState extends State<HomePage> {
               await InheritedRepo.of(context).updateTodo(todo);
               await _load();
             },
+            onTap: () => _openDetails(todo),
           );
         },
       ),
@@ -90,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: _openAdd,
+              onPressed: _openAddTodo,
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

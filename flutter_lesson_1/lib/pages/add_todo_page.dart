@@ -12,24 +12,37 @@ class AddTodoPage extends StatefulWidget {
 }
 
 class _AddTodoPageState extends State<AddTodoPage> {
-  final _controller = TextEditingController();
-  late final AddCubit cubit;
+  final TextEditingController _controller = TextEditingController();
+
+  AddCubit? cubit;
+  bool _isCubitInitialized = false;
 
   @override
-  void initState() {
-    super.initState();
-    final repo = InheritedRepo.of(context);
-    cubit = AddCubit(AddViewModel(repo));
-    cubit.stream.listen((state) {
-      if (state.isSaved) Navigator.pop(context, true);
-      setState(() {}); // чтобы показать errorText
-    });
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!_isCubitInitialized) {
+      final repo = InheritedRepo.of(context);
+      cubit = AddCubit(AddViewModel(repo));
+
+      cubit!.stream.listen((state) {
+        if (!mounted) return;
+
+        if (state.isSaved) {
+          Navigator.pop(context, true);
+        } else {
+          setState(() {});
+        }
+      });
+
+      _isCubitInitialized = true;
+    }
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    cubit.close();
+    cubit?.close();
     super.dispose();
   }
 
@@ -38,7 +51,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
     const bg = Color(0xFFF2F2F7);
     const blue = Color(0xFF007AFF);
 
-    final AddState state = cubit.state;
+    final AddState state = cubit?.state ?? AddState.initial();
 
     return Scaffold(
       backgroundColor: bg,
@@ -60,7 +73,11 @@ class _AddTodoPageState extends State<AddTodoPage> {
         ),
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(1),
-          child: Divider(height: 1, thickness: 1, color: Color(0x22000000)),
+          child: Divider(
+            height: 1,
+            thickness: 1,
+            color: Color(0x22000000),
+          ),
         ),
       ),
       body: Padding(
@@ -83,7 +100,10 @@ class _AddTodoPageState extends State<AddTodoPage> {
                   hintText: 'введите название задачи',
                   hintStyle: TextStyle(color: Colors.black54),
                 ),
-                onChanged: (_) => cubit.clearError(),
+                onChanged: (_) {
+                  cubit?.clearError();
+                  setState(() {});
+                },
               ),
             ),
             const SizedBox(height: 8),
@@ -112,7 +132,9 @@ class _AddTodoPageState extends State<AddTodoPage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () => cubit.addTodo(_controller.text),
+              onPressed: () {
+                cubit?.addTodo(_controller.text);
+              },
               child: const Text(
                 'Сохранить',
                 style: TextStyle(
