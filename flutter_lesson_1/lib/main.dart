@@ -1,33 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'database/app_database.dart';
 import 'repository/todo_repository.dart';
 import 'home/home_page.dart';
-import 'models/todo.dart';
+import 'pages/onboarding_page.dart';
+import 'utils/prefs.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final seen = await Prefs.isSeen();
+
+  final db = AppDatabase();
+  final repo = ToDoRepository(db);
+
+  runApp(MyApp(repo: repo, seen: seen));
+}
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final ToDoRepository repo;
+  final bool seen;
+
+  const MyApp({super.key, required this.repo, required this.seen});
 
   @override
   Widget build(BuildContext context) {
-    final db = AppDatabase();
-    final repo = ToDoRepository(db);
-
-   
-    repo.addTodo(Todo(id: 1, title: 'Сделать домашнее задание', date: DateTime(2026, 9, 14)));
-    repo.addTodo(Todo(id: 2, title: 'Сделать домашнее задание', date: DateTime(2026, 9, 14), isDone: true));
-    repo.addTodo(Todo(id: 3, title: 'Сделать домашнее задание', date: DateTime(2026, 9, 14)));
-    repo.addTodo(Todo(id: 4, title: 'Сделать домашнее задание', date: DateTime(2026, 9, 14)));
-
-    return RepositoryProvider<ToDoRepository>(
-      create: (_) => repo,
-      child: const MaterialApp(
+    return InheritedRepo(
+      repo: repo,
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: HomePage(),
+        home: seen ? const HomePage() : const OnboardingPage(),
       ),
     );
   }
+}
+
+/// Простой DI без provider/flutter_bloc (чтобы не было ошибок)
+class InheritedRepo extends InheritedWidget {
+  final ToDoRepository repo;
+
+  const InheritedRepo({
+    super.key,
+    required this.repo,
+    required super.child,
+  });
+
+  static ToDoRepository of(BuildContext context) {
+    final w = context.dependOnInheritedWidgetOfExactType<InheritedRepo>();
+    if (w == null) throw Exception('ToDoRepository not found');
+    return w.repo;
+  }
+
+  @override
+  bool updateShouldNotify(covariant InheritedRepo oldWidget) => false;
 }

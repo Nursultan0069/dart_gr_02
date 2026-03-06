@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../main.dart'; // чтобы взять InheritedRepo
 import '../models/todo.dart';
 import '../pages/add_todo_page.dart';
 import '../widgets/todo_tile.dart';
@@ -11,31 +12,28 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<Todo> todos = [
-    Todo(id: 1, title: 'Сделать домашнее задание', date: DateTime(2026, 9, 14)),
-    Todo(id: 2, title: 'Сделать домашнее задание', date: DateTime(2026, 9, 14), isDone: true),
-    Todo(id: 3, title: 'Сделать домашнее задание', date: DateTime(2026, 9, 14)),
-    Todo(id: 4, title: 'Сделать домашнее задание', date: DateTime(2026, 9, 14)),
-  ];
+  List<Todo> todos = [];
 
-  Future<void> _openAddTodo() async {
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    final repo = InheritedRepo.of(context);
+    final list = await repo.getTodos();
+    setState(() => todos = list);
+  }
+
+  Future<void> _openAdd() async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => const AddTodoPage()),
     );
 
-    // result = String (название) или null
-    if (result is String && result.trim().isNotEmpty) {
-      setState(() {
-        final nextId = todos.isEmpty ? 1 : (todos.last.id + 1);
-        todos.add(
-          Todo(
-            id: nextId,
-            title: result.trim(),
-            date: DateTime.now(), // можно поменять если у вас фиксированная дата
-          ),
-        );
-      });
+    if (result == true) {
+      await _load(); // ✅ обновляем список
     }
   }
 
@@ -71,8 +69,10 @@ class _HomePageState extends State<HomePage> {
           final todo = todos[index];
           return TodoTile(
             todo: todo,
-            onToggle: () {
-              setState(() => todo.isDone = !todo.isDone);
+            onToggle: () async {
+              todo.isDone = !todo.isDone;
+              await InheritedRepo.of(context).updateTodo(todo);
+              await _load();
             },
           );
         },
@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: _openAddTodo,
+              onPressed: _openAdd,
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
