@@ -45,7 +45,11 @@ class TodoTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: todo.isDone
-                    ? const Icon(Icons.check, size: 18, color: Colors.black)
+                    ? const Icon(
+                        Icons.check,
+                        size: 18,
+                        color: Colors.black,
+                      )
                     : null,
               ),
             ),

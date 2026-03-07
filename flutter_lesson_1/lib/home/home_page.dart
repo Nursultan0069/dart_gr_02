@@ -94,8 +94,8 @@ class _HomePageState extends State<HomePage> {
           return TodoTile(
             todo: todo,
             onToggle: () async {
-              todo.isDone = !todo.isDone;
-              await InheritedRepo.of(context).updateTodo(todo);
+              final updated = todo.copyWith(isDone: !todo.isDone);
+              await InheritedRepo.of(context).updateTodo(updated);
               await _load();
             },
             onTap: () => _openDetails(todo),

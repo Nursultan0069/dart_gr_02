@@ -61,30 +61,21 @@ class _DetailsPageState extends State<DetailsPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(23, 32, 23, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 56,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: const Color(0xFFE0E0E0),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.black, width: 1),
-              ),
-              child: TextField(
-                controller: _titleController,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                ),
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Название задачи',
-                ),
-              ),
+        child: Container(
+          height: 56,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: const Color(0xFFE0E0E0),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.black, width: 1),
+          ),
+          child: TextField(
+            controller: _titleController,
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              hintText: 'Название задачи',
             ),
-          ],
+          ),
         ),
       ),
     );

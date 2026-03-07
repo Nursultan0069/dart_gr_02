@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Prefs {
-  static const _key = "onboarding_seen";
+  static const _key = 'onboarding_seen';
 
   static Future<bool> isSeen() async {
     final sp = await SharedPreferences.getInstance();

@@ -8,7 +8,6 @@ class ToDoRepository {
 
   Future<List<Todo>> getTodos() => db.getTodos();
 
-
   Future<void> addTodo(Todo todo) => db.addTodo(todo);
 
   Future<void> updateTodo(Todo todo) => db.updateTodo(todo);

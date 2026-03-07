@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../main.dart';
-import 'add_mvvm/add_cubit.dart';
-import 'add_mvvm/add_state.dart';
-import 'add_mvvm/add_view_model.dart';
+import '../models/todo.dart';
 
 class AddTodoPage extends StatefulWidget {
   const AddTodoPage({super.key});
@@ -13,36 +11,36 @@ class AddTodoPage extends StatefulWidget {
 
 class _AddTodoPageState extends State<AddTodoPage> {
   final TextEditingController _controller = TextEditingController();
+  String? errorText;
 
-  AddCubit? cubit;
-  bool _isCubitInitialized = false;
+  void _save() async {
+    final text = _controller.text.trim();
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (!_isCubitInitialized) {
-      final repo = InheritedRepo.of(context);
-      cubit = AddCubit(AddViewModel(repo));
-
-      cubit!.stream.listen((state) {
-        if (!mounted) return;
-
-        if (state.isSaved) {
-          Navigator.pop(context, true);
-        } else {
-          setState(() {});
-        }
+    if (text.isEmpty) {
+      setState(() {
+        errorText = 'Заполните поле';
       });
-
-      _isCubitInitialized = true;
+      return;
     }
+
+    final repo = InheritedRepo.of(context);
+
+    final todo = Todo(
+      id: DateTime.now().microsecondsSinceEpoch,
+      title: text,
+      date: DateTime.now(),
+      isDone: false,
+    );
+
+    await repo.addTodo(todo);
+
+    if (!mounted) return;
+    Navigator.pop(context, true);
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    cubit?.close();
     super.dispose();
   }
 
@@ -50,8 +48,6 @@ class _AddTodoPageState extends State<AddTodoPage> {
   Widget build(BuildContext context) {
     const bg = Color(0xFFF2F2F7);
     const blue = Color(0xFF007AFF);
-
-    final AddState state = cubit?.state ?? AddState.initial();
 
     return Scaffold(
       backgroundColor: bg,
@@ -101,15 +97,18 @@ class _AddTodoPageState extends State<AddTodoPage> {
                   hintStyle: TextStyle(color: Colors.black54),
                 ),
                 onChanged: (_) {
-                  cubit?.clearError();
-                  setState(() {});
+                  if (errorText != null) {
+                    setState(() {
+                      errorText = null;
+                    });
+                  }
                 },
               ),
             ),
             const SizedBox(height: 8),
-            if (state.errorText != null)
+            if (errorText != null)
               Text(
-                state.errorText!,
+                errorText!,
                 style: const TextStyle(
                   color: Colors.red,
                   fontSize: 12,
@@ -132,9 +131,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {
-                cubit?.addTodo(_controller.text);
-              },
+              onPressed: _save,
               child: const Text(
                 'Сохранить',
                 style: TextStyle(

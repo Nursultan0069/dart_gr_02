@@ -19,15 +19,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   final pages = const [
     _OnboardData(
-      title: "Todolist",
+      title: 'Todolist',
       subtitle:
-          "Добро пожаловать!\nОрганизуйте свою жизнь с Todolist - приложением для управления задачами",
+          'Добро пожаловать!\nОрганизуйте свою жизнь с Todolist - приложением для управления задачами',
       image: Icons.check_circle,
     ),
     _OnboardData(
-      title: "Все задачи\nв одном месте",
+      title: 'Все задачи\nв одном месте',
       subtitle:
-          "Добавляйте, упорядочивайте и управляйте задачами на день, неделю и месяц",
+          'Добавляйте, упорядочивайте и управляйте задачами на день, неделю и месяц',
       image: Icons.task_alt,
     ),
   ];
@@ -64,13 +64,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
           TextButton(
             onPressed: finish,
             child: const Text(
-              "Пропустить",
+              'Пропустить',
               style: TextStyle(
                 color: Colors.black54,
                 fontWeight: FontWeight.w500,
               ),
             ),
-          )
+          ),
         ],
       ),
       body: Column(
@@ -87,7 +87,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // ЛОГОТИП
                       Container(
                         width: 90,
                         height: 90,
@@ -101,9 +100,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           size: 50,
                         ),
                       ),
-
                       const SizedBox(height: 40),
-
                       Text(
                         item.title,
                         textAlign: TextAlign.center,
@@ -112,9 +109,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
                       const SizedBox(height: 16),
-
                       Text(
                         item.subtitle,
                         textAlign: TextAlign.center,
@@ -124,9 +119,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           height: 1.4,
                         ),
                       ),
-
                       const SizedBox(height: 40),
-
                       Icon(item.image, size: 120, color: redLogo),
                     ],
                   ),
@@ -134,8 +127,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
               },
             ),
           ),
-
-          // Индикаторы
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
@@ -152,10 +143,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               ),
             ),
           ),
-
           const SizedBox(height: 20),
-
-          // Кнопка
           Padding(
             padding: const EdgeInsets.fromLTRB(23, 0, 23, 30),
             child: SizedBox(
@@ -171,7 +159,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 ),
                 onPressed: next,
                 child: Text(
-                  index == pages.length - 1 ? "Начать" : "Далее",
+                  index == pages.length - 1 ? 'Начать' : 'Далее',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
